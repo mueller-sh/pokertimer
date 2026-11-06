@@ -2,6 +2,12 @@
 
 Eine vollständig lokale Turnieruhr ohne Cloud, Server oder externe Abhängigkeiten.
 
+## Online öffnen
+
+**[Poker-Turnieruhr starten](https://poker-turnieruhr-mueller.heroicimage1.chatgpt.site/)**
+
+Der Turnierstand wird lokal im jeweiligen Browser gespeichert.
+
 ## Start
 
 `index.html` per Doppelklick in einem modernen Browser öffnen. Für Vollbild oben rechts auf **Vollbild** klicken.
