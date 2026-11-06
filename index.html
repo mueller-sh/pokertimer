@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071c18">
+  <title>Poker Turnieruhr</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell" id="appShell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">♠</span>
+        <div>
+          <p class="eyebrow">15.000 Chips</p>
+          <h1>Poker Night</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" id="fullscreenButton" type="button" aria-label="Vollbild umschalten" title="Vollbild umschalten">
+          <span aria-hidden="true">⛶</span><span class="button-label">Vollbild</span>
+        </button>
+        <button class="icon-button" id="settingsButton" type="button" aria-label="Einstellungen öffnen">
+          <span aria-hidden="true">⚙</span><span class="button-label">Einstellungen</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="status-row" aria-live="polite">
+      <div class="status-pill" id="statusPill"><span class="status-dot"></span><span id="statusText">Bereit</span></div>
+      <p class="save-status" id="saveStatus">Lokal gespeichert</p>
+    </section>
+
+    <section class="timer-layout">
+      <article class="timer-card">
+        <p class="level-kicker">Level <span id="levelNumber">1</span> von <span id="levelCount">9</span></p>
+        <div class="blinds" aria-label="Aktuelle Blinds">
+          <div><span>Small Blind</span><strong id="smallBlind">25</strong></div>
+          <div class="blind-divider" aria-hidden="true">/</div>
+          <div><span>Big Blind</span><strong id="bigBlind">50</strong></div>
+        </div>
+        <div class="countdown" id="countdown" role="timer" aria-live="off">20:00</div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+      </article>
+
+      <aside class="next-card">
+        <p class="eyebrow">Als Nächstes</p>
+        <div id="nextLevelContent">
+          <p class="next-blinds"><span id="nextSmallBlind">50</span> / <span id="nextBigBlind">100</span></p>
+          <p class="next-duration"><span id="nextDuration">20</span> Minuten</p>
+        </div>
+        <p class="tournament-complete" id="tournamentComplete" hidden>Letztes Level</p>
+      </aside>
+    </section>
+
+    <section class="controls" aria-label="Timer-Steuerung">
+      <button class="secondary-button" id="previousButton" type="button"><span aria-hidden="true">←</span> Vorheriges</button>
+      <button class="primary-button" id="playPauseButton" type="button"><span class="play-icon" id="playIcon" aria-hidden="true">▶</span><span id="playLabel">Start</span></button>
+      <button class="secondary-button" id="nextButton" type="button">Nächstes <span aria-hidden="true">→</span></button>
+    </section>
+
+    <footer class="footer-actions">
+      <p><kbd>Leertaste</kbd> Start / Pause · <kbd>←</kbd><kbd>→</kbd> Level wechseln</p>
+      <button class="danger-button" id="resetButton" type="button">Neu starten</button>
+    </footer>
+  </main>
+
+  <div class="restore-banner" id="restoreBanner" hidden>
+    <div>
+      <strong>Sitzung wiederhergestellt</strong>
+      <span>Der gespeicherte Reststand wurde angehalten geladen.</span>
+    </div>
+    <button id="restoreContinueButton" type="button">Fortsetzen</button>
+    <button class="banner-close" id="restoreCloseButton" type="button" aria-label="Hinweis schließen">×</button>
+  </div>
+
+  <dialog id="settingsDialog" class="modal">
+    <form method="dialog" id="settingsForm">
+      <div class="modal-header">
+        <div><p class="eyebrow">Turnierplan</p><h2>Einstellungen</h2></div>
+        <button class="modal-close" value="cancel" aria-label="Einstellungen schließen">×</button>
+      </div>
+      <div class="setting-group sound-settings">
+        <label class="toggle-row"><span><strong>Gong bei Levelwechsel</strong><small>Wird lokal im Browser erzeugt.</small></span><input id="soundEnabledInput" type="checkbox" checked></label>
+        <label class="range-row" for="volumeInput"><span>Lautstärke</span><input id="volumeInput" type="range" min="0" max="1" step="0.05" value="0.75"><output id="volumeOutput">75 %</output></label>
+        <button class="text-button" id="testSoundButton" type="button">Gong testen</button>
+      </div>
+      <div class="levels-heading"><span>Blindlevel</span><span>Dauer</span></div>
+      <div id="levelsEditor" class="levels-editor"></div>
+      <p class="settings-note">Änderungen werden sofort lokal gespeichert. Die Restzeit des aktuellen Levels wird bei einer Verkürzung entsprechend begrenzt.</p>
+      <div class="modal-actions">
+        <button class="secondary-button compact" value="cancel">Abbrechen</button>
+        <button class="primary-button compact" id="saveSettingsButton" value="default">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="resetDialog" class="modal confirm-modal">
+    <form method="dialog">
+      <div class="confirm-icon" aria-hidden="true">↻</div>
+      <h2>Turnier neu starten?</h2>
+      <p>Der aktuelle Stand wird gelöscht. Die Uhr springt auf Level 1 und 20:00 zurück. Deine Einstellungen bleiben erhalten.</p>
+      <div class="modal-actions">
+        <button class="secondary-button compact" value="cancel">Abbrechen</button>
+        <button class="danger-button solid" id="confirmResetButton" value="default">Ja, neu starten</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="timer-core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
